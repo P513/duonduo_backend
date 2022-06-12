@@ -1,19 +1,9 @@
-CREATE TABLE users(
-
-                             id int NOT NULL AUTO_INCREMENT,
-
-                             username varchar(10),
-
-                             password varchar(12) NOT NULL,
-
-                             firstName varchar(10),
-
-                             lastName varchar(10),
-
-                             age tinyint,
-
-                             salary int,
-
-                             PRIMARY KEY(id)
-
-       );
+CREATE TABLE `test_db`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(45) NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `firstName` VARCHAR(45) NULL,
+  `lastName` VARCHAR(45) NULL,
+  `age` TINYINT NULL,
+  `salary` INT NULL,
+  PRIMARY KEY (`id`));
