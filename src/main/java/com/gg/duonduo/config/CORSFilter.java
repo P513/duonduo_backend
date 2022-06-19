@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Configuration;
 
+/*
+    CORS 설정 파일
+ */
 @Configuration
 public class CORSFilter implements Filter{
 

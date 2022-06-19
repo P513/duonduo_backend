@@ -1,8 +1,9 @@
 package com.gg.duonduo.controller;
+
 import java.util.List;
 
-import com.gg.duonduo.domain.User;
-import com.gg.duonduo.repository.UserRepository;
+import com.gg.duonduo.domain.UserDto;
+import com.gg.duonduo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,44 +16,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+/*
+    localhost:8080/users controller
+ */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
-    UserRepository userMapper;
+    UserMapper userMapper;
 
     @GetMapping
-    public List<User> userList(){
+    public List<UserDto> userList() {
         System.out.println(userMapper.userList());
         System.out.println("유저리스트 출력 성공");
         return userMapper.userList();
     }
 
     @PostMapping
-    void insertUser(@RequestBody User user) {
+    void insertUser(@RequestBody UserDto user) {
         userMapper.insertUser(user);
         System.out.println("유저 DB 저장 성공");
     }
 
     @GetMapping("/{id}")
-    public User fetchUserByID(@PathVariable int id) {
+    public UserDto fetchUserByID(@PathVariable int id) {
         System.out.println(userMapper.fetchUserByID(id));
-        User fetchUser = userMapper.fetchUserByID(id);
+        UserDto fetchUser = userMapper.fetchUserByID(id);
         return fetchUser;
     }
 
     @PutMapping("/{id}")
-    public void updateUser(@PathVariable int id, @RequestBody User user) {
+    public void updateUser(@PathVariable int id, @RequestBody UserDto user) {
 
-        User updateUser = user;
+        UserDto updateUser = user;
         System.out.println("업데이트유저 => " + updateUser);
 
-        updateUser.setFirstName(user.getFirstName());
-        updateUser.setLastName(user.getLastName());
-        updateUser.setAge(user.getAge());
-        updateUser.setSalary(user.getSalary());
+        updateUser.setPassword(user.getPassword());
+        updateUser.setSalt(user.getSalt());
+        updateUser.setEmail(user.getEmail());
 
         userMapper.updateUser(updateUser);
     }

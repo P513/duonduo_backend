@@ -2,32 +2,37 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTDMapper3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gg.duonduo.repository.UserRepository">
+<mapper namespace="com.gg.duonduo.mapper.UserMapper">
 
-    <insert id="insertUser" parameterType="com.gg.duonduo.domain.User">
-        INSERT INTO user(username, password, firstName, lastName, age, salary)
-        VALUES(#{username}, #{password}, #{firstName}, #{lastName}, #{age}, #{salary})
-    </insert>
-
-    <select id="userList" resultType="com.gg.duonduo.domain.User">
-        SELECT * FROM user
+    <select id="userList" resultType="com.gg.duonduo.domain.UserDto">
+        SELECT *
+        FROM user
         ORDER BY id
     </select>
 
-    <select id="fetchUserByID" resultType="com.gg.duonduo.domain.User"
+    <select id="fetchUserByID" resultType="com.gg.duonduo.domain.UserDto"
             parameterType="int">
-        SELECT * FROM user
+        SELECT *
+        FROM user
         WHERE id = #{id}
     </select>
 
+    <insert id="insertUser" parameterType="com.gg.duonduo.domain.UserDto">
+        INSERT INTO user(password, salt, email)
+        VALUES (#{password}, #{salt}, #{email})
+    </insert>
+
     <delete id="deleteUser" parameterType="int">
-        DELETE FROM user
+        DELETE
+        FROM user
         WHERE id = #{id}
     </delete>
 
-    <update id="updateUser" parameterType="com.gg.duonduo.domain.User">
+    <update id="updateUser" parameterType="com.gg.duonduo.domain.UserDto">
         UPDATE user
-        SET firstName = #{firstName}, lastName = #{lastName}, age = #{age}, salary = #{salary}
+        SET password = #{password},
+            salt  = #{salt},
+            email       = #{email}
         WHERE id = #{id}
     </update>
 

@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+/*
+    localhost:8080/hello controller
+ */
 @RestController
 public class HelloController {
     @GetMapping("/hello")
