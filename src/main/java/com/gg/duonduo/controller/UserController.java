@@ -37,9 +37,9 @@ public class UserController {
         return userService.userList();
     }
 
+    // 회원가입 API
     @PostMapping
-    void insertUser(@RequestBody UserDto user) {
-        System.out.println("insert"+user);
+    public void insertUser(@RequestBody UserDto user) {
         userService.insertUser(user);
     }
 
@@ -48,16 +48,25 @@ public class UserController {
         return userService.fetchUserByID(id);
     }
 
+    // 비밀번호 변경 API
     @PutMapping("/{id}")
     public void updateUser(@PathVariable int id, @RequestBody UserDto user) {
-        user.setPassword(user.getPassword());
-        user.setEmail(user.getEmail());
         userService.updateUser(user);
     }
 
+    // 회원탈퇴 API
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
     }
+
+    @GetMapping("/login")
+    public void login(@RequestBody UserDto user){
+        userService.loginByEmail(user);
+    }
+/*
+    @GetMapping("/logout")
+    public void logout()
+*/
 
 }
