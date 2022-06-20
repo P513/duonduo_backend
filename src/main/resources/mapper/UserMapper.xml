@@ -18,8 +18,8 @@
     </select>
 
     <insert id="insertUser" parameterType="com.gg.duonduo.domain.UserDto">
-        INSERT INTO user(password, salt, email)
-        VALUES (#{password}, #{salt}, #{email})
+        INSERT INTO user(password, email)
+        VALUES (#{password}, #{email})
     </insert>
 
     <delete id="deleteUser" parameterType="int">
@@ -31,7 +31,6 @@
     <update id="updateUser" parameterType="com.gg.duonduo.domain.UserDto">
         UPDATE user
         SET password = #{password},
-            salt  = #{salt},
             email       = #{email}
         WHERE id = #{id}
     </update>

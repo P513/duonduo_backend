@@ -11,7 +11,6 @@ public class UserDto {
     int id;
     int nicknameId;
     String password;
-    String salt;
     String email;
     String naverOAuth;
     String kakaoOAuth;

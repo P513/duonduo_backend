@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.mapper.UserMapper;
+import com.gg.duonduo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,46 +25,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    UserMapper userMapper;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<UserDto> userList() {
-        System.out.println(userMapper.userList());
-        System.out.println("유저리스트 출력 성공");
-        return userMapper.userList();
+        return userService.userList();
     }
 
     @PostMapping
     void insertUser(@RequestBody UserDto user) {
-        userMapper.insertUser(user);
-        System.out.println("유저 DB 저장 성공");
+        System.out.println("insert"+user);
+        userService.insertUser(user);
     }
 
     @GetMapping("/{id}")
     public UserDto fetchUserByID(@PathVariable int id) {
-        System.out.println(userMapper.fetchUserByID(id));
-        UserDto fetchUser = userMapper.fetchUserByID(id);
-        return fetchUser;
+        return userService.fetchUserByID(id);
     }
 
     @PutMapping("/{id}")
     public void updateUser(@PathVariable int id, @RequestBody UserDto user) {
-
-        UserDto updateUser = user;
-        System.out.println("업데이트유저 => " + updateUser);
-
-        updateUser.setPassword(user.getPassword());
-        updateUser.setSalt(user.getSalt());
-        updateUser.setEmail(user.getEmail());
-
-        userMapper.updateUser(updateUser);
+        user.setPassword(user.getPassword());
+        user.setEmail(user.getEmail());
+        userService.updateUser(user);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id) {
-        userMapper.deleteUser(id);
-        System.out.println("유저 삭제, 성공적");
+        userService.deleteUser(id);
     }
 
 }

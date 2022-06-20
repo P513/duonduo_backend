@@ -1,7 +1,6 @@
 CREATE TABLE `test_db`.`user` (
 `id` INT NOT NULL AUTO_INCREMENT,
 `nicknameId` INT NULL,
-`salt` VARCHAR(45) NOT NULL,
 `email` VARCHAR(45) NULL,
 `naverOAuth` VARCHAR(45) NULL,
 `kakaoOAuth` VARCHAR(45) NULL,
@@ -19,7 +18,7 @@ ALTER TABLE `test_db`.`user`
 ;
 
 ALTER TABLE `test_db`.`user`
-    ADD COLUMN `password` VARCHAR(45) NOT NULL AFTER `nicknameId`;
+    ADD COLUMN `password` VARCHAR(128) NOT NULL AFTER `nicknameId`;
 
 ALTER TABLE `test_db`.`user`
     CHANGE COLUMN `nicknameId` `nicknameId` INT NULL ;
