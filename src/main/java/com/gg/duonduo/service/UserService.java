@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -22,13 +24,13 @@ public class UserService {
 
     public List<UserDto> userList() {
         System.out.println(userMapper.userList());
-        System.out.println("유저리스트 출력 성공");
+        System.out.println("유저리스트 출력 시도..");
         return userMapper.userList();
     }
 
     @Transactional
     public void insertUser(UserDto user) {
-        System.out.println("유저 DB 저장 성공");
+        System.out.println("유저 DB 저장 시도..");
         System.out.println(passwordEncoder.encode(user.getPassword()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         System.out.println(user.getPassword());
@@ -37,23 +39,23 @@ public class UserService {
 
     public UserDto fetchUserByID(int id) {
         System.out.println(userMapper.fetchUserByID(id));
-        System.out.println("유저 ID로 조회 성공");
+        System.out.println("유저 ID로 조회 시도..");
         return userMapper.fetchUserByID(id);
     }
 
     @Transactional
     public void updateUser(UserDto updateUser) {
-        System.out.println("유저 DB 갱신 성공");
+        System.out.println("유저 DB 갱신 시도..");
         updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         userMapper.updateUser(updateUser);
     }
 
     public void deleteUser(int id) {
-        System.out.println("유저 DB 삭제 성공");
+        System.out.println("유저 DB 삭제 시도..");
         userMapper.deleteUser(id);
     }
 
-    public UserDto loginByEmail(UserDto user){
+    public UserDto loginByEmail(UserDto user, HttpServletRequest request){
         String email = user.getEmail();
         String password = user.getPassword();
         System.out.println(userMapper.fetchUserByEmail(email));
@@ -63,7 +65,7 @@ public class UserService {
             throw new EmailNotExistException();
         }
         // 비밀번호가 일치하면
-        if(passwordEncoder.encode(user.getPassword()) != userDto.getPassword()) {
+        if(!passwordEncoder.matches(user.getPassword() ,userDto.getPassword())) {
             throw new PasswordNotMatchedException();
         }
         }
@@ -73,8 +75,19 @@ public class UserService {
         catch(PasswordNotMatchedException e){
             System.err.println("Password Does Not Matched.");
         }
-        System.out.println("유저 Email로 로그인 성공");
+        System.out.println("유저 Email로 로그인 시도..");
+        // 세션 매니저를 활용해서 세션이 없으면 생성, 있으면 세션 반환
+        HttpSession httpSession=request.getSession(true);
+        httpSession.setAttribute("USER", userDto);
         return userDto;
+    }
+
+    public void logout(HttpServletRequest request){
+        HttpSession httpSession = request.getSession(false);
+        if(httpSession!=null){
+            httpSession.invalidate();
+        }
+        return;
     }
 
     private class PasswordNotMatchedException extends Exception {

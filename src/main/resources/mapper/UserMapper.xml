@@ -35,4 +35,11 @@
         WHERE id = #{id}
     </update>
 
+    <select id="fetchUserByEmail" resultType="com.gg.duonduo.domain.UserDto"
+            parameterType="com.gg.duonduo.domain.UserDto">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+    </select>
+
 </mapper>

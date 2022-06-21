@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 /*
     localhost:8080/users controller
@@ -60,13 +62,13 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @GetMapping("/login")
-    public void login(@RequestBody UserDto user){
-        userService.loginByEmail(user);
+    @PostMapping("/login")
+    public void login(@RequestBody UserDto user, HttpServletRequest httpServletRequest){
+        userService.loginByEmail(user, httpServletRequest);
     }
-/*
-    @GetMapping("/logout")
-    public void logout()
-*/
 
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest httpServletRequest) {
+        userService.logout(httpServletRequest);
+    }
 }
