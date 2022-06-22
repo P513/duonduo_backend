@@ -6,6 +6,8 @@ import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.mapper.UserMapper;
 import com.gg.duonduo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,8 +65,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody UserDto user, HttpServletRequest httpServletRequest){
+    public ResponseEntity<Object> login(@RequestBody UserDto user, HttpServletRequest httpServletRequest){
         userService.loginByEmail(user, httpServletRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("로그인 완료");
     }
 
     @GetMapping("/logout")

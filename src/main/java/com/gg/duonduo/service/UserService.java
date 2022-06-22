@@ -55,7 +55,7 @@ public class UserService {
         userMapper.deleteUser(id);
     }
 
-    public UserDto loginByEmail(UserDto user, HttpServletRequest request){
+    public void loginByEmail(UserDto user, HttpServletRequest request){
         String email = user.getEmail();
         String password = user.getPassword();
         System.out.println(userMapper.fetchUserByEmail(email));
@@ -78,8 +78,8 @@ public class UserService {
         System.out.println("유저 Email로 로그인 시도..");
         // 세션 매니저를 활용해서 세션이 없으면 생성, 있으면 세션 반환
         HttpSession httpSession=request.getSession(true);
-        httpSession.setAttribute("USER", userDto);
-        return userDto;
+        httpSession.setAttribute("USER_ID", userDto.getId());
+        System.out.println(httpSession);
     }
 
     public void logout(HttpServletRequest request){
@@ -87,7 +87,6 @@ public class UserService {
         if(httpSession!=null){
             httpSession.invalidate();
         }
-        return;
     }
 
     private class PasswordNotMatchedException extends Exception {
