@@ -55,36 +55,37 @@ public class UserService {
         userMapper.deleteUser(id);
     }
 
-    public void loginByEmail(UserDto user, HttpServletRequest request){
+    public boolean loginByEmail(UserDto user, HttpServletRequest request) {
         String email = user.getEmail();
         String password = user.getPassword();
         System.out.println(userMapper.fetchUserByEmail(email));
         UserDto userDto = userMapper.fetchUserByEmail(email);
-        try{
-        if (userDto == null) {
-            throw new EmailNotExistException();
-        }
-        // 비밀번호가 일치하면
-        if(!passwordEncoder.matches(user.getPassword() ,userDto.getPassword())) {
-            throw new PasswordNotMatchedException();
-        }
-        }
-        catch(EmailNotExistException e){
+        try {
+            if (userDto == null) {
+                throw new EmailNotExistException();
+            }
+            // 비밀번호가 일치하면
+            if (!passwordEncoder.matches(user.getPassword(), userDto.getPassword())) {
+                throw new PasswordNotMatchedException();
+            }
+        } catch (EmailNotExistException e) {
             System.err.println("Email Does Not Exist.");
-        }
-        catch(PasswordNotMatchedException e){
+            return false;
+        } catch (PasswordNotMatchedException e) {
             System.err.println("Password Does Not Matched.");
+            return false;
         }
         System.out.println("유저 Email로 로그인 시도..");
         // 세션 매니저를 활용해서 세션이 없으면 생성, 있으면 세션 반환
-        HttpSession httpSession=request.getSession(true);
-        httpSession.setAttribute("USER_ID", userDto.getId());
+        HttpSession httpSession = request.getSession(true);
+        httpSession.setAttribute("USER_ID", userDto);
         System.out.println(httpSession);
+        return true;
     }
 
-    public void logout(HttpServletRequest request){
+    public void logout(HttpServletRequest request) {
         HttpSession httpSession = request.getSession(false);
-        if(httpSession!=null){
+        if (httpSession != null) {
             httpSession.invalidate();
         }
     }

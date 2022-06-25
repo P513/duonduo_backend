@@ -1,5 +1,7 @@
 package com.gg.duonduo.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /*
@@ -16,6 +18,7 @@ public class UserDto {
     String kakaoOAuth;
     int evalCnt;
     int evalSum;
+    @JsonFormat(pattern="yyyyMMddHHmmss")
     String createdAt;
     String updatedAt;
     String deletedAt;
