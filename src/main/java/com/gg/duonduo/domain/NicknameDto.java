@@ -5,16 +5,16 @@ import lombok.Data;
 @Data
 public class NicknameDto {
 
-    int id;
-    int userId;
-    String name;
-    int tier;
-    int rank;
-    String ment;
-    int selfPos;
-    int duoPos;
-    int playStyle;
-    int voice;
-    boolean status;
+    private long id;
+    private long userId;
+    private String name;
+    private int tier;
+    private int rank;
+    private String ment;
+    private int selfPos;
+    private int duoPos;
+    private int playStyle;
+    private int voice;
+    private boolean status;
 
 }

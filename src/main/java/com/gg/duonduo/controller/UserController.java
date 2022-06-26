@@ -2,12 +2,14 @@ package com.gg.duonduo.controller;
 
 import java.util.List;
 
+import com.gg.duonduo.config.JwtToken;
 import com.gg.duonduo.config.Response;
 import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +51,7 @@ public class UserController {
     // 회원가입 API
     @PostMapping
     public ResponseEntity<Response<Object>> insertUser(@RequestBody UserDto user) {
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.insertUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(new Response(null, true, "회원가입을 완료했습니다."));
     }
@@ -66,6 +69,7 @@ public class UserController {
     // 비밀번호 변경 API
     @PutMapping("/{id}")
     public ResponseEntity<Response> updateUser(@PathVariable int id, @RequestBody UserDto user) {
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.updateUser(user);
         return ResponseEntity.status(HttpStatus.OK).body(new Response(null, true, "비밀번호 변경을 성공하였습니다."));
     }
@@ -78,13 +82,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody UserDto user, HttpServletRequest httpServletRequest) {
-        boolean successLogin = userService.loginByEmail(user, httpServletRequest);
-        if (successLogin == false) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new Response(null, false, "이메일이 존재하지 않거나 비밀번호가 일치하지 않습니다."));
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response(null, true, "로그인을 성공하였습니다."));
+    public ResponseEntity<Object> login(@RequestBody UserDto user) {
+        String token = userService.loginByEmail(user);
+        if(token==null){
+            return ResponseEntity.status(HttpStatus.OK).body(new Response(null, false, "로그인을 실패하였습니다."));
         }
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(token, true, "로그인을 성공하였습니다."));
+    }
+
+    @PostMapping("/token")
+    public ResponseEntity<Object> verifyToken(@RequestBody String token) {
+        Long tokenData = userService.decode(token);
+        if(tokenData==null){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null, false, "토큰이 유효하지 않습니다."));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(tokenData, true, "토큰이 유효합니다."));
     }
 
     @GetMapping("/logout")

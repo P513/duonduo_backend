@@ -26,3 +26,6 @@ ALTER TABLE `test_db`.`user`
 ALTER TABLE `test_db`.`user`
     ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
 ;
+
+ALTER TABLE `test_db`.`user`
+    ADD COLUMN `role` VARCHAR(45) NOT NULL DEFAULT 'USER' AFTER `nicknameId`;

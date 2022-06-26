@@ -1,8 +1,15 @@
 package com.gg.duonduo.service;
 
+import com.gg.duonduo.config.JwtToken;
+import com.gg.duonduo.config.Response;
 import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +19,15 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
+    private final JwtToken jwtToken;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserMapper userMapper, JwtToken jwtToken, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
+        this.jwtToken = jwtToken;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -30,10 +39,8 @@ public class UserService {
 
     @Transactional
     public void insertUser(UserDto user) {
-        System.out.println("유저 DB 저장 시도..");
-        System.out.println(passwordEncoder.encode(user.getPassword()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user.getPassword());
+        System.out.println("유저 DB 저장 시도..");
         userMapper.insertUser(user);
     }
 
@@ -45,8 +52,8 @@ public class UserService {
 
     @Transactional
     public void updateUser(UserDto updateUser) {
-        System.out.println("유저 DB 갱신 시도..");
         updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        System.out.println("유저 DB 갱신 시도..");
         userMapper.updateUser(updateUser);
     }
 
@@ -55,10 +62,13 @@ public class UserService {
         userMapper.deleteUser(id);
     }
 
-    public boolean loginByEmail(UserDto user, HttpServletRequest request) {
+    public Long decode(String token) {
+        System.out.println("토큰 검증 중..");
+        return jwtToken.decode(token);
+    }
+
+    public String loginByEmail(UserDto user) {
         String email = user.getEmail();
-        String password = user.getPassword();
-        System.out.println(userMapper.fetchUserByEmail(email));
         UserDto userDto = userMapper.fetchUserByEmail(email);
         try {
             if (userDto == null) {
@@ -70,17 +80,14 @@ public class UserService {
             }
         } catch (EmailNotExistException e) {
             System.err.println("Email Does Not Exist.");
-            return false;
-        } catch (PasswordNotMatchedException e) {
-            System.err.println("Password Does Not Matched.");
-            return false;
+            return null;
+        }catch (PasswordNotMatchedException e) {
+            System.err.println("Password Does Not Match.");
+            return null;
         }
         System.out.println("유저 Email로 로그인 시도..");
-        // 세션 매니저를 활용해서 세션이 없으면 생성, 있으면 세션 반환
-        HttpSession httpSession = request.getSession(true);
-        httpSession.setAttribute("USER_ID", userDto);
-        System.out.println(httpSession);
-        return true;
+        final JwtToken.TokenRes tokenDto = new JwtToken.TokenRes(jwtToken.createToken(userDto.getId()));
+        return tokenDto.getToken();
     }
 
     public void logout(HttpServletRequest request) {
@@ -88,6 +95,11 @@ public class UserService {
         if (httpSession != null) {
             httpSession.invalidate();
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userMapper.fetchUserByEmail(username);
     }
 
     private class PasswordNotMatchedException extends Exception {

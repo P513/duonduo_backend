@@ -1,26 +1,58 @@
 package com.gg.duonduo.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 /*
     DTO : 계층 간 데이터 객체
  */
 @Data
-public class UserDto {
+public class UserDto implements UserDetails {
 
-    int id;
-    int nicknameId;
-    String password;
-    String email;
-    String naverOAuth;
-    String kakaoOAuth;
-    int evalCnt;
-    int evalSum;
+    private long id;
+    private long nicknameId;
+    private String role;
+    private String password;
+    private String email;
+    private String naverOAuth;
+    private String kakaoOAuth;
+    private int evalCnt;
+    private int evalSum;
     @JsonFormat(pattern="yyyyMMddHHmmss")
-    String createdAt;
-    String updatedAt;
-    String deletedAt;
+    private String createdAt;
+    private String updatedAt;
+    private String deletedAt;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {return true;}
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
