@@ -48,16 +48,8 @@ public class UserController {
         }
     }
 
-    // 회원가입 API
-    @PostMapping
-    public ResponseEntity<Response<Object>> insertUser(@RequestBody UserDto user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.insertUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Response(null, true, "회원가입을 완료했습니다."));
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<Response<Object>> fetchUserByID(@PathVariable int id) {
+    public ResponseEntity<Response<Object>> fetchUserByID(@PathVariable long id) {
         UserDto userDto = userService.fetchUserByID(id);
         if (userDto == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null, false, "회원 조회에 실패하였습니다."));
@@ -66,42 +58,4 @@ public class UserController {
         }
     }
 
-    // 비밀번호 변경 API
-    @PutMapping("/{id}")
-    public ResponseEntity<Response> updateUser(@PathVariable int id, @RequestBody UserDto user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.updateUser(user);
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(null, true, "비밀번호 변경을 성공하였습니다."));
-    }
-
-    // 회원탈퇴 API
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Response> deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(null, true, "비밀번호 변경을 성공하였습니다."));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody UserDto user) {
-        String token = userService.loginByEmail(user);
-        if(token==null){
-            return ResponseEntity.status(HttpStatus.OK).body(new Response(null, false, "로그인을 실패하였습니다."));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(token, true, "로그인을 성공하였습니다."));
-    }
-
-    @PostMapping("/token")
-    public ResponseEntity<Object> verifyToken(@RequestBody String token) {
-        Long tokenData = userService.decode(token);
-        if(tokenData==null){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null, false, "토큰이 유효하지 않습니다."));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(tokenData, true, "토큰이 유효합니다."));
-    }
-
-    @GetMapping("/logout")
-    public ResponseEntity<Object> logout(HttpServletRequest httpServletRequest) {
-        userService.logout(httpServletRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(null, true, "로그아웃을 성공하였습니다."));
-    }
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTDMapper3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gg.duonduo.mapper.AuthMapper">
+
+    <insert id="insertUser" parameterType="com.gg.duonduo.domain.UserDto">
+        INSERT INTO user(password, email)
+        VALUES (#{password}, #{email})
+    </insert>
+
+    <delete id="deleteUser" parameterType="long">
+        DELETE
+        FROM user
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateUser" parameterType="com.gg.duonduo.domain.UserDto">
+        UPDATE user
+        SET password = #{password},
+            email       = #{email}
+        WHERE id = #{id}
+    </update>
+
+    <select id="fetchUserByEmail" resultType="com.gg.duonduo.domain.UserDto"
+            parameterType="com.gg.duonduo.domain.UserDto">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+    </select>
+
+    <select id="fetchUserByID" resultType="com.gg.duonduo.domain.UserDto"
+            parameterType="long">
+        SELECT *
+        FROM user
+        WHERE id = #{id}
+    </select>
+</mapper>

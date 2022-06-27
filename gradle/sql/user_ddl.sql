@@ -29,3 +29,7 @@ ALTER TABLE `test_db`.`user`
 
 ALTER TABLE `test_db`.`user`
     ADD COLUMN `role` VARCHAR(45) NOT NULL DEFAULT 'USER' AFTER `nicknameId`;
+
+ALTER TABLE `test_db`.`user`
+    CHANGE COLUMN `id` `id` BIGINT NOT NULL ,
+    CHANGE COLUMN `nicknameId` `nicknameId` BIGINT NULL DEFAULT NULL ;
