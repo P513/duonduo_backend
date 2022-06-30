@@ -18,3 +18,10 @@
 | /user        | GET    |                | UserDto   | return all users             |
 | /user/id     | GET    |                | UserDto   | return user                  |
 
+
+### Info
+| URL          | Method | Parameter      | Return        | Description                  |
+|--------------|--------|----------------|---------------|------------------------------|
+| /info        | GET    |   token        | NicknameDto   | return user's info           |
+| /info        | PATCH  |   token, info  | NicknameDto   | modify user's info           |
+| /info        | POST   |   token, info  | NicknameDto   | add user's info              |
