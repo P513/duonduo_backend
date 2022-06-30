@@ -12,5 +12,5 @@ public interface AuthMapper {
     void deleteUser(long id);
 
     UserDto fetchUserByEmail(String email);
-    UserDto fetchUserByID(long id);
+    UserDto fetchUserByUserID(long id);
 }

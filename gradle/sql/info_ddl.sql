@@ -18,3 +18,9 @@ FOREIGN KEY (`userId`)
 REFERENCES `test_db`.`user` (`id`)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION);
+ALTER TABLE `test_db`.`nickname`
+    RENAME TO  `test_db`.`info` ;
+ALTER TABLE `test_db`.`info`
+    CHANGE COLUMN `voice` `voice` TINYINT NOT NULL DEFAULT 1 ;
+ALTER TABLE `test_db`.`info`
+    CHANGE COLUMN `status` `status` TINYINT NOT NULL DEFAULT '1' ;

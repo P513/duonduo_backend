@@ -3,7 +3,7 @@ package com.gg.duonduo.domain;
 import lombok.Data;
 
 @Data
-public class NicknameDto {
+public class InfoDto {
 
     private long id;
     private long userId;

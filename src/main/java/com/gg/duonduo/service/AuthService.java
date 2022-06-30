@@ -3,22 +3,18 @@ package com.gg.duonduo.service;
 import com.gg.duonduo.config.JwtToken;
 import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.mapper.AuthMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final AuthMapper authMapper;
     private final JwtToken jwtToken;
-
-    public AuthService(PasswordEncoder passwordEncoder, AuthMapper authMapper, JwtToken jwtToken) {
-        this.passwordEncoder = passwordEncoder;
-        this.authMapper = authMapper;
-        this.jwtToken = jwtToken;
-    }
 
     @Transactional
     public boolean insertUser(UserDto user) {
@@ -40,9 +36,9 @@ public class AuthService {
     }
 
     public UserDto fetchUserByID(long id) {
-        System.out.println(authMapper.fetchUserByID(id));
+        System.out.println(authMapper.fetchUserByUserID(id));
         System.out.println("유저 ID로 조회 시도..");
-        return authMapper.fetchUserByID(id);
+        return authMapper.fetchUserByUserID(id);
     }
 
     public Long decode(String token) {

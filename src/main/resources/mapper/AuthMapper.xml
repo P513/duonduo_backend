@@ -29,7 +29,7 @@
         WHERE email = #{email}
     </select>
 
-    <select id="fetchUserByID" resultType="com.gg.duonduo.domain.UserDto"
+    <select id="fetchUserByUserID" resultType="com.gg.duonduo.domain.UserDto"
             parameterType="long">
         SELECT *
         FROM user

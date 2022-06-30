@@ -33,3 +33,5 @@ ALTER TABLE `test_db`.`user`
 ALTER TABLE `test_db`.`user`
     CHANGE COLUMN `id` `id` BIGINT NOT NULL ,
     CHANGE COLUMN `nicknameId` `nicknameId` BIGINT NULL DEFAULT NULL ;
+ALTER TABLE `test_db`.`user`
+    CHANGE COLUMN `nicknameId` `infoId` BIGINT NULL DEFAULT NULL ;

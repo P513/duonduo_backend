@@ -2,25 +2,17 @@ package com.gg.duonduo.controller;
 
 import java.util.List;
 
-import com.gg.duonduo.config.JwtToken;
 import com.gg.duonduo.config.Response;
 import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /*
@@ -28,15 +20,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping
     public ResponseEntity<Response<List<UserDto>>> userList() {
@@ -50,7 +38,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Response<Object>> fetchUserByID(@PathVariable long id) {
-        UserDto userDto = userService.fetchUserByID(id);
+        UserDto userDto = userService.fetchUserByUserID(id);
         if (userDto == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null, false, "회원 조회에 실패하였습니다."));
         } else {

@@ -15,7 +15,7 @@ import java.util.Collection;
 public class UserDto implements UserDetails {
 
     private long id;
-    private long nicknameId;
+    private long infoId;
     private String role;
     private String password;
     private String email;

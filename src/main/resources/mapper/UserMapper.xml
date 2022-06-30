@@ -10,11 +10,17 @@
         ORDER BY id
     </select>
 
-    <select id="fetchUserByID" resultType="com.gg.duonduo.domain.UserDto"
+    <select id="fetchUserByUserID" resultType="com.gg.duonduo.domain.UserDto"
             parameterType="long">
         SELECT *
         FROM user
         WHERE id = #{id}
     </select>
 
+    <select id="updateInfoId" resultType="com.gg.duonduo.domain.UserDto"
+            parameterType="long">
+        UPDATE user
+        SET infoId = #{infoId}
+        WHERE id = #{userId}
+    </select>
 </mapper>

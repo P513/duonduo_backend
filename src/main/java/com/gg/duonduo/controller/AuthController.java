@@ -3,23 +3,22 @@ package com.gg.duonduo.controller;
 import com.gg.duonduo.config.Response;
 import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-    private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+    private final AuthService authService;
 
     // 회원탈퇴 API
     @DeleteMapping("/resign")
-    public ResponseEntity<Response> deleteUser(@RequestHeader("Authorization") String authorization) {
+    public ResponseEntity<Response<Object>> deleteUser(@RequestHeader("Authorization") String authorization) {
         String token = authorization;
         Long id = authService.decode(token);
         authService.deleteUser(id);
@@ -37,7 +36,7 @@ public class AuthController {
 
     // 비밀번호 변경 API
     @PutMapping
-    public ResponseEntity<Response> updateUser(@RequestHeader("Authorization") String authorization, @RequestBody String password) {
+    public ResponseEntity<Response<Object>> updateUser(@RequestHeader("Authorization") String authorization, @RequestBody String password) {
         String token = authorization;
         Long id = authService.decode(token);
         UserDto user = authService.fetchUserByID(id);
