@@ -19,10 +19,9 @@ public class AuthController {
     // 회원탈퇴 API
     @DeleteMapping("/resign")
     public ResponseEntity<Response<Object>> deleteUser(@RequestHeader("Authorization") String authorization) {
-        String token = authorization;
-        Long id = authService.decode(token);
+        Long id = authService.decode(authorization);
         authService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(null, true, "회원 삭제를 성공하였습니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(new Response<>(null, true, "회원 삭제를 성공하였습니다."));
     }
 
     @PostMapping("/login")
@@ -37,21 +36,20 @@ public class AuthController {
     // 비밀번호 변경 API
     @PutMapping
     public ResponseEntity<Response<Object>> updateUser(@RequestHeader("Authorization") String authorization, @RequestBody String password) {
-        String token = authorization;
-        Long id = authService.decode(token);
+        Long id = authService.decode(authorization);
         UserDto user = authService.fetchUserByID(id);
         authService.updateUser(user, password);
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(null, true, "비밀번호 변경을 성공하였습니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(new Response<>(null, true, "비밀번호 변경을 성공하였습니다."));
     }
 
     // 회원가입 API
     @PostMapping("/signup")
     public ResponseEntity<Response<Object>> insertUser(@RequestBody UserDto user) {
         boolean isSuccess = authService.insertUser(user);
-        if (isSuccess == false) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null, false, "회원가입을 실패했습니다."));
+        if (!isSuccess) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response<>(null, false, "회원가입을 실패했습니다."));
         } else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response(null, true, "회원가입을 완료했습니다."));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response<>(null, true, "회원가입을 완료했습니다."));
         }
     }
 

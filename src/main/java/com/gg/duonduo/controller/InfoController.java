@@ -2,7 +2,6 @@ package com.gg.duonduo.controller;
 
 import com.gg.duonduo.config.Response;
 import com.gg.duonduo.domain.InfoDto;
-import com.gg.duonduo.domain.UserDto;
 import com.gg.duonduo.service.AuthService;
 import com.gg.duonduo.service.InfoService;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +23,16 @@ public class InfoController {
         InfoDto infoDto = infoService.fetchInfoByUserId(id);
         System.out.println(infoDto);
         if(infoDto == null){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null,false,"회원 정보를 먼저 등록해주세요."));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response<>(null,false,"회원 정보를 먼저 등록해주세요."));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(infoDto,true,"회원 정보를 조회합니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(new Response<>(infoDto,true,"회원 정보를 조회합니다."));
     }
 
     @PatchMapping
     public ResponseEntity<Response<Object>> updateInfo(@RequestHeader("Authorization") String authorization, @RequestBody InfoDto info) {
         Long id = getIdFromDecodedToken(authorization);
         infoService.updateInfo(id, info);
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(null,true,"회원 정보를 조회합니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(new Response<>(null,true,"회원 정보를 조회합니다."));
     }
 
     @PostMapping
@@ -43,15 +42,13 @@ public class InfoController {
         InfoDto infoDto = infoService.insertInfo(id, info);
         System.out.println(infoDto);
         if(infoDto == null){
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null,false,"회원 정보를 수정해주세요."));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response<>(null,false,"회원 정보를 수정해주세요."));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(null,true,"회원 정보를 조회합니다."));
+        return ResponseEntity.status(HttpStatus.OK).body(new Response<>(null,true,"회원 정보를 조회합니다."));
     }
 
     private Long getIdFromDecodedToken(@RequestHeader("Authorization") String authorization) {
-        String token = authorization;
-        Long id = authService.decode(token);
-        return id;
+        return authService.decode(authorization);
     }
 
 }

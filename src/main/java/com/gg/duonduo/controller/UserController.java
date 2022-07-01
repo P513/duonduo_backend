@@ -40,9 +40,9 @@ public class UserController {
     public ResponseEntity<Response<Object>> fetchUserByID(@PathVariable long id) {
         UserDto userDto = userService.fetchUserByUserID(id);
         if (userDto == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response(null, false, "회원 조회에 실패하였습니다."));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new Response<>(null, false, "회원 조회에 실패하였습니다."));
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response(userDto, true, "회원 조회를 성공하였습니다."));
+            return ResponseEntity.status(HttpStatus.OK).body(new Response<>(userDto, true, "회원 조회를 성공하였습니다."));
         }
     }
 
