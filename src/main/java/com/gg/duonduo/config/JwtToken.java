@@ -37,8 +37,8 @@ public class JwtToken {
     private Date expiresAt()  {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        // 일주일 24 * 7
-        cal.add(Calendar.HOUR, 168);
+        // 1시간
+        cal.add(Calendar.HOUR, 1);
         return cal.getTime();
     }
 

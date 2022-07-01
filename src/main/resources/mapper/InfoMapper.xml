@@ -17,15 +17,7 @@
     </insert>
 
     <update id="updateInfo" parameterType="com.gg.duonduo.domain.InfoDto">
-        UPDATE user
-        SET name      = #{name},
-            tier      = #{tier},
-            rank      = #{rank},
-            ment      = #{ment},
-            selfPos   = #{selfPos},
-            duoPos    = #{duoPos},
-            playStyle = #{playStyle},
-            voice     = #{voice},
-            WHERE id = #{userId}
+        UPDATE info
+        SET name = #{infoDto.name}, tier = #{infoDto.tier},`rank` = #{infoDto.rank}, ment = #{infoDto.ment},selfPos = #{infoDto.selfPos}, duoPos = #{infoDto.duoPos}, playStyle = #{infoDto.playStyle}, voice = #{infoDto.voice} WHERE userId = #{userId}
     </update>
 </mapper>
