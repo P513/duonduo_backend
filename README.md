@@ -25,3 +25,21 @@
 | /info        | GET    |   token        | NicknameDto   | return user's info           |
 | /info        | PATCH  |   token, info  | NicknameDto   | modify user's info           |
 | /info        | POST   |   token, info  | NicknameDto   | add user's info              |
+
+## 2. Docker Command
+### build
+```
+docker build -t duonduo:version .
+```
+### run
+```
+docker run -d --name duonduo -p HOSTPORT(8080):CONTAINERPORT(8080) duonduo:version
+```
+### running container
+```
+docker ps
+```
+### logs
+```
+docker logs -f duonduo
+```
